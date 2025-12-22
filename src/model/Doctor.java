@@ -14,7 +14,7 @@ public class Doctor {
         this.expirienceYears = expirienceYears;
         this.isFree = true;
     }
-    public int getID(){
+    public int getId(){
         return id;
     }
     public String getName(){
@@ -25,8 +25,20 @@ public class Doctor {
         System.out.println("Doctor specialization is: ");
         return specialization;
     }
+    public int getExpirienceYears(){
+        return expirienceYears;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public void setName(String name){
         this.name = name;
+    }
+    public void setSpecialization(String specialization){
+        this.specialization = specialization;
+    }
+    public void setExpirienceYears(int expirienceYears){
+        this.expirienceYears = expirienceYears;
     }
     public void assignPatient(){
         isFree = false;
