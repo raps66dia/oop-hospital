@@ -14,17 +14,40 @@ public class Appointment {
         this.date = date;
         this.completed = false;
     }
+    public Appointment(){}
+    public int getId(){
+        return id;
+    }
+    public Patient getPatient(){
+        return patient;
+    }
+    public Doctor getDoctor(){
+        return doctor;
+    }
+    public String getDate(){
+        return date;
+    }
+    public void setDate(String date){
+        this.date = date;
+    }
     public void startAppointment(){
         patient.admitPatient();
-        System.out.println(patient);
+        System.out.println("Information about parient: " + patient);
+        System.out.println();
         System.out.println("Appointment started on " + date);
         doctor.assignPatient();
-        System.out.println(doctor);
+        System.out.println("Information about doctor: " + doctor);
     }
     public void comletedAppointment(){
         System.out.println("Appointment finished");
+        System.out.println();
         completed = true;
         doctor.finishAppoinment();
         patient.dischargePatient();
+        System.out.println();
     }
+    @Override
+    public String toString(){
+        return "Appointment[id: " + id + ", " + this.patient + ", " + this.doctor + ", date: " + date + "]";
+     }
 }

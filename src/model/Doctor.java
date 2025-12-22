@@ -14,15 +14,14 @@ public class Doctor {
         this.expirienceYears = expirienceYears;
         this.isFree = true;
     }
+    public Doctor(){}
     public int getId(){
         return id;
     }
     public String getName(){
-        System.out.println("Doctor name is: ");
         return name;
     }
     public String getSpecialization(){
-        System.out.println("Doctor specialization is: ");
         return specialization;
     }
     public int getExpirienceYears(){
@@ -46,7 +45,7 @@ public class Doctor {
     }
     public void finishAppoinment(){
         isFree = true;
-        System.out.println("The Doctor is free now");
+        System.out.println(name + " is free now");
     }
     @Override
     public String toString() {

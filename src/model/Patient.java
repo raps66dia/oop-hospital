@@ -13,16 +13,17 @@ public class Patient {
         this.illness = illness;
         this.name = name;
     }
+    public Patient(){
+
+    }
     public int getID(){
         System.out.println("ID of patient: ");
         return id;
     }
     public String getName(){
-        System.out.println("Patient name: ");
         return name;
     }
     public String getIllness() {
-        System.out.println("Patient illness: ");
         return illness;
     }
     public boolean isAdmitted(){
@@ -32,7 +33,6 @@ public class Patient {
         this.illness = illness;
     }
     public int getAge(){
-        System.out.println("Patient age: ");
         return age;
     }
     public void setName(String name){
