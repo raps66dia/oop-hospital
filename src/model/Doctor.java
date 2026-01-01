@@ -14,7 +14,12 @@ public class Doctor {
         this.expirienceYears = expirienceYears;
         this.isFree = true;
     }
-    public Doctor(){}
+    public Doctor(){
+        this.id = 0;
+        this.name = "Unknown";
+        this.specialization = "Null";
+        this.expirienceYears = 0;
+    }
     public int getId(){
         return id;
     }
@@ -28,16 +33,33 @@ public class Doctor {
         return expirienceYears;
     }
     public void setId(int id) {
-        this.id = id;
+        if (id >= 0) {
+            this.id = id;
+        } else {
+            System.out.println("Warning: id is not right! Setting to 0.");
+            this.id = 0;
+        }
     }
     public void setName(String name){
-        this.name = name;
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        } else {
+            System.out.println("Error: name cannot be empty!");
+        }
     }
     public void setSpecialization(String specialization){
-        this.specialization = specialization;
+        if (specialization != null && !specialization.trim().isEmpty()) {
+            this.specialization = specialization;
+        } else {
+            System.out.println("Warning: write correct!");
+        }
     }
     public void setExpirienceYears(int expirienceYears){
-        this.expirienceYears = expirienceYears;
+        if (expirienceYears > 0) {
+            this.expirienceYears = expirienceYears;
+        } else {
+            this.expirienceYears = 0;
+        }
     }
     public void assignPatient(){
         isFree = false;

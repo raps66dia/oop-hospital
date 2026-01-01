@@ -14,7 +14,10 @@ public class Patient {
         this.name = name;
     }
     public Patient(){
-
+        this.id = 0;
+        this.age = 0;
+        this.illness = "Unknown";
+        this.name = "Unknown";
     }
     public int getID(){
         System.out.println("ID of patient: ");
@@ -30,17 +33,26 @@ public class Patient {
         return admitted;
     }
     public void setIllness(String illness){
-        this.illness = illness;
+        if (illness != null && !illness.trim().isEmpty()) {
+            this.illness = illness;
+        } else {
+            System.out.println("Warning: illness empty!");
+        }
     }
     public int getAge(){
         return age;
     }
     public void setName(String name){
-        this.name = name;
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name;
+        }
     }
     public void setAge(int age){
-        if(age > 0) {
+        if(age >= 0) {
             this.age = age;
+        } else {
+            System.out.println("Warning: age cannot be negative!");
+            this.age = 0;
         }
     }
     public void admitPatient(){

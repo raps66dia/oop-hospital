@@ -14,7 +14,8 @@ public class Appointment {
         this.date = date;
         this.completed = false;
     }
-    public Appointment(){}
+    public Appointment(){
+    }
     public int getId(){
         return id;
     }
@@ -28,7 +29,12 @@ public class Appointment {
         return date;
     }
     public void setDate(String date){
-        this.date = date;
+        if (date != null && !date.trim().isEmpty()) {
+            this.date = date;
+        } else {
+            System.out.println("Warning: date cannot be empty!");
+            this.date = "Unknown";
+        }
     }
     public void startAppointment(){
         patient.admitPatient();
