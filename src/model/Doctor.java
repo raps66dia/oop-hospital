@@ -4,21 +4,21 @@ public class Doctor {
     private int id;
     private String name;
     private String specialization;
-    private int expirienceYears;
+    private int experienceYears;
     private boolean isFree;
 
     public Doctor(int id, String name, String specialization, int expirienceYears){
         this.id = id;
         this.name = name;
         this.specialization = specialization;
-        this.expirienceYears = expirienceYears;
+        this.experienceYears = experienceYears;
         this.isFree = true;
     }
     public Doctor(){
         this.id = 0;
         this.name = "Unknown";
         this.specialization = "Null";
-        this.expirienceYears = 0;
+        this.experienceYears = 0;
     }
     public int getId(){
         return id;
@@ -29,8 +29,8 @@ public class Doctor {
     public String getSpecialization(){
         return specialization;
     }
-    public int getExpirienceYears(){
-        return expirienceYears;
+    public int getExperienceYears(){
+        return experienceYears;
     }
     public void setId(int id) {
         if (id >= 0) {
@@ -54,11 +54,11 @@ public class Doctor {
             System.out.println("Warning: write correct!");
         }
     }
-    public void setExpirienceYears(int expirienceYears){
-        if (expirienceYears > 0) {
-            this.expirienceYears = expirienceYears;
+    public void setExperienceYears(int experienceYears){
+        if (experienceYears > 0) {
+            this.experienceYears = experienceYears;
         } else {
-            this.expirienceYears = 0;
+            this.experienceYears = 0;
         }
     }
     public void assignPatient(){
@@ -71,6 +71,6 @@ public class Doctor {
     }
     @Override
     public String toString() {
-        return "Doctor[id: " + this.id +", " + "name: " + this.name +", " + "specialization: " + this.specialization + ", " + "expirience: " + this.expirienceYears + " years] ";
+        return "Doctor[id: " + this.id +", " + "name: " + this.name +", " + "specialization: " + this.specialization + ", " + "expirience: " + this.experienceYears + " years] ";
     }
 }

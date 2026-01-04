@@ -17,92 +17,21 @@ public class Main {
 
         appointments.add(new Appointment(10, patients.get(0), doctors.get(0), "30.12.2025"));
 
-        System.out.println();
-        System.out.println("=== Hospital Management System ===");
-        System.out.println();
-        Patient patient1 = new Patient(1, 20, "flu", "Ilya Ermakov");
-        Patient patient2 = new Patient(2,19,"fever", "Alimhan Bahanov");
-        Patient patient3 = new Patient();
-
-        Doctor doctor1 = new Doctor(1, "Dr.Almas", "therapist", 10);
-        Doctor doctor2 = new Doctor(2, "Dr.Ali", "main doctor", 20);
         Appointment appointment = new Appointment(
                 1,
-                patient1,
-                doctor1,
+                patients.get(1),
+                doctors.get(0),
                 "19.12.2025"
         );
-        Appointment appointment1 = new Appointment(2, patient2, doctor2, "22.12.2025");
-
-        System.out.println("--- Patients ---");
-        System.out.println(patient1);
-        System.out.println(patient2);
-        System.out.println(patient3);
-        System.out.println();
-
-        System.out.println("--- Doctors ---");
-        System.out.println(doctor1);
-        System.out.println(doctor2);
-        System.out.println();
+        Appointment appointment1 = new Appointment(2, patients.get(0), doctors.get(1), "22.12.2025");
 
         System.out.println("--- Appointments ---");
         System.out.println(appointment);
         System.out.println(appointment1);
         System.out.println();
 
-        System.out.println("--- Testing Getters ---");
-        System.out.println("Patient name: " + patient1.getName());
-        System.out.println("Patient illness: " + patient1.getIllness());
-        System.out.println("Doctor name: " + doctor1.getName());
-        System.out.println("Doctor specialization: " + doctor2.getSpecialization());
-        System.out.println("Appointment doctor: " + doctor1);
-        System.out.println();
-
-        System.out.println("--- Testing Setters ---");
-        System.out.println("Updating patient1...");
-        patient1.setName("Bekmansur Sadykov");
-        patient1.setAge(20);
-        patient1.setIllness("a cold");
-        System.out.println("Updated: " + patient1);
-        System.out.println();
-
-        System.out.println("Changing Doctor1...");
-        doctor1.setName("Dr.Azamat");
-        System.out.println("Updated: " + doctor1);
-        System.out.println();
-
-        System.out.println("--- Testing Patient Methods ---");
-        patient2.admitPatient();
-        patient1.dischargePatient();
-        System.out.println();
-
-        System.out.println("--- Testing Doctor Methods ---");
-        doctor2.assignPatient();
-        doctor1.finishAppoinment();
-        System.out.println();
-
-        System.out.println("--- Testing Appointment Methods ---");
-        appointment.startAppointment();
-        appointment.comletedAppointment();
-        System.out.println();
-
-        System.out.println("--- Final State ---");
-        System.out.println("All patients: ");
-        System.out.println(patient1);
-        System.out.println(patient2);
-        System.out.println(patient3);
-        System.out.println();
-
-        System.out.println("Doctors: ");
-        System.out.println(doctor1);
-        System.out.println(doctor2);
-        System.out.println();
-
-        System.out.println("Appointments: ");
-        System.out.println(appointment);
-        System.out.println(appointment1);
-
         System.out.println("\n=== Program Complete ===");
+        System.out.println("==========================");
         boolean running = true;
         while (running){
             displayMenu();
@@ -137,6 +66,8 @@ public class Main {
         System.out.println("2. View All Patients");
         System.out.println("3. Add Doctor");
         System.out.println("4. View All Doctors");
+        System.out.println("5. Add Appointment");
+        System.out.println("6. View All Appointments");
         System.out.println("0. Exit");
         System.out.println("Enter choice: _");
     }
@@ -144,6 +75,13 @@ public class Main {
         System.out.print("Enter patient id: ");
         int id = scanner.nextInt();
         scanner.nextLine();
+
+        for (int i = 0; i < patients.size(); i++){
+            if (patients.get(i).getID() == id) {
+                System.out.println("Patient with this ID is already exists!");
+                return;
+            }
+        }
 
         System.out.print("Enter patient age: ");
         int age = scanner.nextInt();
@@ -170,6 +108,13 @@ public class Main {
         int id = scanner.nextInt();
         scanner.nextLine();
 
+        for (int i = 0; i < doctors.size(); i++){
+            if (doctors.get(i).getId() == id){
+                System.out.println("Doctor with this ID is already exists!");
+                return;
+            }
+        }
+
         System.out.println("Enter doctor name: ");
         String name = scanner.nextLine();
 
@@ -177,10 +122,10 @@ public class Main {
         String specialization = scanner.nextLine();
 
         System.out.println("Enter doctor expirience: ");
-        int expirienceYears = scanner.nextInt();
+        int experienceYears = scanner.nextInt();
         scanner.nextLine();
 
-        Doctor newDoctor = new Doctor(id, name, specialization, expirienceYears);
+        Doctor newDoctor = new Doctor(id, name, specialization, experienceYears);
         doctors.add(newDoctor);
 
         System.out.println("Doctor added!");
@@ -189,6 +134,9 @@ public class Main {
         for(int i = 0; i < doctors.size(); i++){
             System.out.println(doctors.get(i));
         }
+    }
+    public static void addAppointment(){
+
     }
 
 
