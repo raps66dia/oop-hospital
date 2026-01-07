@@ -51,6 +51,12 @@ public class Main {
                 case 4:
                     viewAllDoctors();
                     break;
+                case 5:
+                    addAppointment();
+                    break;
+                case 6:
+                    viewAllAppointment();
+                    break;
                 case 0:
                     System.out.println("Goodbye, see you later!");
                     running = false;
@@ -136,8 +142,63 @@ public class Main {
         }
     }
     public static void addAppointment(){
+        System.out.println("Enter appointment ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
 
+        for (int i = 0; i < appointments.size(); i++){
+            if(appointments.get(i).getId() == id) {
+                System.out.println("Appointment with this ID is already exist!");
+                return;
+            }
+        }
+
+        System.out.println("Enter patient ID: ");
+        int patID = scanner.nextInt();
+        scanner.nextLine();
+
+        Patient patient = findPatientID(patID);
+        if (patient == null) {
+            System.out.println("Patient not found!");
+            return;
+        }
+
+        System.out.println("Enter doctor ID: ");
+        int docID = scanner.nextInt();
+        scanner.nextLine();
+
+        Doctor doctor = findDoctorID(docID);
+        if (doctor == null) {
+            System.out.println("Doctor not found!");
+            return;
+        }
+
+        System.out.println("Enter date of appointment: ");
+        String date = scanner.nextLine();
     }
+    public static void viewAllAppointment(){
+        for (int i = 0; i < appointments.size(); i++){
+            System.out.println(appointments.get(i));
+        }
+    }
+    public static Patient findPatientID(int id) {
+        for (int i = 0; i < patients.size(); i++){
+            if(patients.get(i).getID() == id){
+                return patients.get(i);
+            }
+        }
+        return null;
+    }
+    public static Doctor findDoctorID(int id) {
+        for (int i = 0; i < doctors.size(); i++){
+            if(doctors.get(i).getId() == id){
+                return doctors.get(i);
+            }
+        }
+        return null;
+    }
+
+
 
 
 }
