@@ -6,16 +6,21 @@ public class Main {
     private static ArrayList<Doctor> doctors = new ArrayList<>();
     private static ArrayList<Patient> patients = new ArrayList<>();
     private static ArrayList<Appointment> appointments = new ArrayList<>();
+    private static ArrayList<Person> people = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args){
-        doctors.add(new Doctor(3, "Dr.Mark", "surgeon", 12));
-        doctors.add(new Doctor(4, "Dr.Dana", "surgeon helper", 3));
-        doctors.add(new Doctor(5, "Dr.Nazar", "director", 20));
+        doctors.add(new Doctor(3, "Dr.Mark", 45, "surgeon", 12));
+        doctors.add(new Doctor(4, "Dr.Dana", 44, "surgeon helper", 3));
+        doctors.add(new Doctor(5, "Dr.Nazar", 40, "director", 20));
 
         patients.add(new Patient(4, 15, "appendicitis", "Nuray Eshimova"));
         patients.add(new Patient(5, 20, "liver transplant", "Aydin Kasteev"));
 
+        people.add(new Patient(6, 22, "flu", "Alihan Smaev"));
+        people.add(new Doctor(6, "Dr. Saya", 47, "Surgeon", 22));
+
         appointments.add(new Appointment(10, patients.get(0), doctors.get(0), "30.12.2025"));
+
 
         Appointment appointment = new Appointment(
                 1,
@@ -40,22 +45,25 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    addPatient();
+                    addPerson();
                     break;
                 case 2:
-                    viewAllPatients();
+                    addPatient();
                     break;
                 case 3:
                     addDoctor();
                     break;
                 case 4:
-                    viewAllDoctors();
+                    viewAllPeople();
                     break;
                 case 5:
-                    addAppointment();
+                    demonPolymor();
                     break;
                 case 6:
-                    viewAllAppointment();
+                    viewAllPatients();
+                    break;
+                case 7:
+                    viewAllDoctors();
                     break;
                 case 0:
                     System.out.println("Goodbye, see you later!");
@@ -68,19 +76,90 @@ public class Main {
     }
     public static void displayMenu() {
         System.out.println("=== HOSPITAL SYSTEM ===");
-        System.out.println("1. Add Patient");
-        System.out.println("2. View All Patients");
+        System.out.println("1. Add Person");
+        System.out.println("2. Add Patient");
         System.out.println("3. Add Doctor");
-        System.out.println("4. View All Doctors");
-        System.out.println("5. Add Appointment");
-        System.out.println("6. View All Appointments");
-        System.out.println("0. Exit");
+        System.out.println("4. View All Person(Polymorphic)");
+        System.out.println("5. Start treatment(Polymorphism Demo)");
+        System.out.println("6. View Only Patient");
+        System.out.println("7. View Only Doctors");
+        System.out.println("0.Exit");
         System.out.println("Enter choice: _");
+    }
+    public static void addPerson(){
+        System.out.println("Enter person ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        if (id < 0) {
+           System.out.print("ID cannot be negative") ;
+           return;
+        }
+        for(int i = 0; i < people.size(); i++){
+            if(people.get(i).getId() == id){
+                System.out.print("Person with this ID is already");
+                return;
+            }
+        }
+
+        System.out.println("Enter person name: ");
+        String name = scanner.nextLine();
+
+        if (!(name != null && !name.trim().isEmpty())) {
+            System.out.print("Name cannot be empty");
+            return;
+        }
+
+        System.out.println("Enter person age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine();
+
+        if (age < 0) {
+            System.out.print("Cannot be negative");
+            return;
+        }
+        Person newPerson = new Person(id, name, age);
+        people.add(newPerson);
+
+        System.out.println("Person added!");
+
+    }
+    public static void viewAllPeople(){
+        System.out.println("==================");
+        System.out.println("    ALL PEOPLE    ");
+        System.out.println("==================");
+        if (people.isEmpty()){
+            System.out.println("NOT FOUND");
+            return;
+        }
+        System.out.println("Total people " + people.size());
+        System.out.println();
+
+        for(int i = 0; i < people.size(); i++){
+            System.out.println(people.get(i));
+        }
+    }
+    public static void demonPolymor(){
+        System.out.println("\n=======================");
+        System.out.println("    POLYMORPHISM DEMO    ");
+        System.out.println("=========================");
+        System.out.println("Calling work() on all people");
+        System.out.println();
+
+        for (Person person : people){
+            person.work();
+        }
+        System.out.println();
     }
     public static void addPatient(){
         System.out.print("Enter patient id: ");
         int id = scanner.nextInt();
         scanner.nextLine();
+
+        if(id < 0){
+            System.out.println("ID cannot be negative!");
+            return;
+        }
 
         for (int i = 0; i < patients.size(); i++){
             if (patients.get(i).getID() == id) {
@@ -100,19 +179,37 @@ public class Main {
         String name = scanner.nextLine();
 
         Patient newPatient = new Patient(id, age, illness, name);
-        patients.add(newPatient);
+        people.add(newPatient);
 
         System.out.println("Patient added!");
     }
     public static void viewAllPatients(){
-        for (int i = 0; i < patients.size(); i++){
-            System.out.println(patients.get(i));
+        System.out.println("\n==========================");
+        System.out.println("       PATIENTS ONLY        ");
+        System.out.println("===========================");
+
+        int patietnsCount = 0;
+
+        for (Person person : people){
+            if (person instanceof Patient){
+                Patient patient = (Patient) person;
+                patietnsCount++;
+
+                System.out.println(patietnsCount + "." + patient.getName());
+                System.out.println("Name: " + patient.getName());
+                System.out.println("Illness: " + patient.getIllness());
+            }
         }
     }
     public static void addDoctor(){
         System.out.println("Enter doctor id: ");
         int id = scanner.nextInt();
         scanner.nextLine();
+
+        if(id < 0){
+            System.out.println("ID cannot be negative!");
+            return;
+        }
 
         for (int i = 0; i < doctors.size(); i++){
             if (doctors.get(i).getId() == id){
@@ -124,6 +221,10 @@ public class Main {
         System.out.println("Enter doctor name: ");
         String name = scanner.nextLine();
 
+        System.out.println("Enter doctor age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine();
+
         System.out.println("Enter doctor specialization: ");
         String specialization = scanner.nextLine();
 
@@ -131,14 +232,27 @@ public class Main {
         int experienceYears = scanner.nextInt();
         scanner.nextLine();
 
-        Doctor newDoctor = new Doctor(id, name, specialization, experienceYears);
-        doctors.add(newDoctor);
+        Doctor newDoctor = new Doctor(id, name, age, specialization, experienceYears);
+        people.add(newDoctor);
 
         System.out.println("Doctor added!");
     }
     public static void viewAllDoctors(){
-        for(int i = 0; i < doctors.size(); i++){
-            System.out.println(doctors.get(i));
+        System.out.println("\n==========================");
+        System.out.println("       DOCTORS ONLY        ");
+        System.out.println("===========================");
+
+        int doctorsCount = 0;
+
+        for (Person person: people){
+            if (person instanceof Doctor){
+                Doctor doctor = (Doctor) person;
+                doctorsCount++;
+
+                System.out.println(doctorsCount + "." + doctor.getName());
+                System.out.println("Name: " + doctor.getName());
+                System.out.println("Specialization " + doctor.getSpecialization());
+            }
         }
     }
     public static void addAppointment(){

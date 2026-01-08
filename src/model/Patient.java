@@ -1,23 +1,16 @@
 package model;
 
-public class Patient {
-    private int id;
-    private int age;
+public class Patient extends Person{
     private String illness;
-    private String name;
     private boolean admitted;
 
     public Patient(int id, int age, String illness, String name){
-        this.id = id;
-        this.age = age;
+        super(id, name, age);
         this.illness = illness;
-        this.name = name;
     }
     public Patient(){
-        this.id = 0;
-        this.age = 0;
+        super(0, "Unknown", 0);
         this.illness = "Unknown";
-        this.name = "Unknown";
     }
     public int getID(){
         System.out.println("ID of patient: ");
@@ -65,6 +58,14 @@ public class Patient {
     }
     @Override
     public String toString() {
-        return "Patient[id: " + id +", " + "name: " + name +", " + "illness: " + illness + "]";
+        return "Patient[id: " + id +", " + "name: " + name +", age: " + age + ", illness: " + illness + "]";
+    }
+    @Override
+    public void work() {
+        System.out.println("Patient " + name + " is being treated.");
+    }
+    @Override
+    public String getRole() {
+        return "Patient";
     }
 }

@@ -1,24 +1,19 @@
 package model;
 
-public class Doctor {
-    private int id;
-    private String name;
+public class Doctor extends Person {
     private String specialization;
     private int experienceYears;
     private boolean isFree;
 
-    public Doctor(int id, String name, String specialization, int expirienceYears){
-        this.id = id;
-        this.name = name;
+    public Doctor(int id, String name, int age, String specialization, int experienceYears){
+        super(id, name, age);
         this.specialization = specialization;
         this.experienceYears = experienceYears;
         this.isFree = true;
     }
     public Doctor(){
-        this.id = 0;
-        this.name = "Unknown";
+        super(0, "unknown", 0);
         this.specialization = "Null";
-        this.experienceYears = 0;
     }
     public int getId(){
         return id;
@@ -72,5 +67,13 @@ public class Doctor {
     @Override
     public String toString() {
         return "Doctor[id: " + this.id +", " + "name: " + this.name +", " + "specialization: " + this.specialization + ", " + "expirience: " + this.experienceYears + " years] ";
+    }
+    @Override
+    public void work(){
+        System.out.println("Doctor " + name + " is treating patients.");
+    }
+    @Override
+    public String getRole(){
+        return "Doctor";
     }
 }
