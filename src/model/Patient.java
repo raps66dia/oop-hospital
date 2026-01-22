@@ -12,19 +12,6 @@ public class Patient extends Person{
         super(0, "Unknown", 0);
         this.illness = "Unknown";
     }
-    public int getID(){
-        System.out.println("ID of patient: ");
-        return id;
-    }
-    public String getName(){
-        return name;
-    }
-    public String getIllness() {
-        return illness;
-    }
-    public boolean isAdmitted(){
-        return admitted;
-    }
     public void setIllness(String illness){
         if (illness != null && !illness.trim().isEmpty()) {
             this.illness = illness;
@@ -32,22 +19,14 @@ public class Patient extends Person{
             System.out.println("Warning: illness empty!");
         }
     }
-    public int getAge(){
-        return age;
+    public String getIllness() {
+        return illness;
     }
-    public void setName(String name){
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name;
-        }
+
+    public boolean isAdmitted(){
+        return admitted;
     }
-    public void setAge(int age){
-        if(age >= 0) {
-            this.age = age;
-        } else {
-            System.out.println("Warning: age cannot be negative!");
-            this.age = 0;
-        }
-    }
+
     public void admitPatient(){
         admitted = true;
         System.out.println(name + " has been admitted to the hospital");

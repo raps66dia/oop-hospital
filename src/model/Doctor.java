@@ -15,47 +15,26 @@ public class Doctor extends Person {
         super(0, "unknown", 0);
         this.specialization = "Null";
     }
-    public int getId(){
-        return id;
-    }
-    public String getName(){
-        return name;
+    public void setSpecialization(String specialization){
+        if (specialization == null && specialization.trim().isEmpty()) {
+            throw new IllegalArgumentException("Warning: write correct!");
+        }
+        this.specialization = specialization;
     }
     public String getSpecialization(){
         return specialization;
     }
+
+    public void setExperienceYears(int experienceYears){
+        if (experienceYears < 0) {
+            throw new IllegalArgumentException("Can't be negative!");
+        }
+        this.experienceYears = experienceYears;
+    }
     public int getExperienceYears(){
         return experienceYears;
     }
-    public void setId(int id) {
-        if (id >= 0) {
-            this.id = id;
-        } else {
-            System.out.println("Warning: id is not right! Setting to 0.");
-            this.id = 0;
-        }
-    }
-    public void setName(String name){
-        if (name != null && !name.trim().isEmpty()) {
-            this.name = name;
-        } else {
-            System.out.println("Error: name cannot be empty!");
-        }
-    }
-    public void setSpecialization(String specialization){
-        if (specialization != null && !specialization.trim().isEmpty()) {
-            this.specialization = specialization;
-        } else {
-            System.out.println("Warning: write correct!");
-        }
-    }
-    public void setExperienceYears(int experienceYears){
-        if (experienceYears > 0) {
-            this.experienceYears = experienceYears;
-        } else {
-            this.experienceYears = 0;
-        }
-    }
+
     public void assignPatient(){
         isFree = false;
         System.out.println("Doctor " + name + " now is busy with a patient");

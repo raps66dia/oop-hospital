@@ -1,6 +1,8 @@
 package model;
 
-public class Appointment {
+import menu.Appointable;
+
+public class Appointment implements Appointable {
     private int id;
     private Patient patient;
     private Doctor doctor;
@@ -16,18 +18,6 @@ public class Appointment {
     }
     public Appointment(){
     }
-    public int getId(){
-        return id;
-    }
-    public Patient getPatient(){
-        return patient;
-    }
-    public Doctor getDoctor(){
-        return doctor;
-    }
-    public String getDate(){
-        return date;
-    }
     public void setDate(String date){
         if (date != null && !date.trim().isEmpty()) {
             this.date = date;
@@ -36,21 +26,27 @@ public class Appointment {
             this.date = "Unknown";
         }
     }
-    public void startAppointment(){
-        patient.admitPatient();
-        System.out.println("Information about parient: " + patient);
-        System.out.println();
-        System.out.println("Appointment started on " + date);
-        doctor.assignPatient();
-        System.out.println("Information about doctor: " + doctor);
+    public String getDate(){
+        return date;
     }
-    public void comletedAppointment(){
-        System.out.println("Appointment finished");
-        System.out.println();
-        completed = true;
+    public int getId(){return id;}
+    public Patient getPatient(){
+        return patient;
+    }
+    public Doctor getDoctor(){
+        return doctor;
+    }
+    @Override
+    public void start(){
+        patient.admitPatient();
+        doctor.assignPatient();
+        System.out.println("Appointment started on " + date);
+    }
+    @Override
+    public void finish(){
         doctor.finishAppoinment();
         patient.dischargePatient();
-        System.out.println();
+        System.out.println("Appointment finished");
     }
     @Override
     public String toString(){
