@@ -18,7 +18,7 @@ public class HospitalMenu implements Menu {
         people.add(new Doctor(1, "Dr.Arystan", 45, "surgeon", 20));
         people.add(new Patient(1, 18, "cancer", "Nurasyl"));
         Doctor d = new Doctor(2, "Dr.Almas", 50, "Main Doctor", 20);
-        Patient p = new Patient(2, 20, "blood transportation", "Sem");
+        Patient p = new Patient(2, 20, "blood transportation", "Aibek");
         appointment = new Appointment(1, p, d, "20.01.2026");
     }
 
