@@ -12,6 +12,11 @@ public class Patient extends Person{
         super(0, "Unknown", 0);
         this.illness = "Unknown";
     }
+
+    public String getName(){ return name; }
+
+    public int getAge(){ return age; }
+
     public void setIllness(String illness){
         if (illness != null && !illness.trim().isEmpty()) {
             this.illness = illness;
@@ -47,4 +52,5 @@ public class Patient extends Person{
     public String getRole() {
         return "Patient";
     }
+
 }

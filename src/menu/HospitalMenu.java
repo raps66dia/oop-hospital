@@ -6,13 +6,11 @@ import java.util.Scanner;
 
 public class HospitalMenu implements Menu {
     private ArrayList<Person> people;
-    private ArrayList<Appointment> appointments;
     private Scanner scanner;
     private Appointment appointment;
 
     public HospitalMenu() {
         this.people = new ArrayList<>();
-        this.appointments = new ArrayList<>();
         this.scanner = new Scanner(System.in);
 
         people.add(new Doctor(1, "Dr.Arystan", 45, "surgeon", 20));
@@ -38,31 +36,28 @@ public class HospitalMenu implements Menu {
         System.out.println("==========================");
     }
     @Override
-    public void run(){
+    public void run() {
         boolean running = true;
-        while(running){
+        while (running) {
             displayMenu();
             System.out.println("Enter action: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
             try {
-                int choice = scanner.nextInt();
-                scanner.nextLine();
-
-                switch (choice){
+                switch (choice) {
                     case 1: addDoctor(); break;
                     case 2: addPatient(); break;
                     case 3: viewAll(); break;
                     case 4: allWork(); break;
-                    case 5: appointment.start(); break;
-                    case 6: appointment.finish(); break;
-                    case 0: running = false; break;
-                    default: System.out.println("Error!");
+                    case 5: appointment.start();
+                    case 6: appointment.finish();
+                    case 0: running = false; System.out.println("Completed"); break;
+                    default: System.out.println("Error");
                 }
             } catch (Exception e) {
                 System.out.println("Error " + e.getMessage());
-                scanner.nextLine();
             }
         }
-        scanner.close();
     }
     private void addDoctor(){
         try {
@@ -70,14 +65,14 @@ public class HospitalMenu implements Menu {
             int id = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.println("Name: ");
+            System.out.println("name: ");
             String name = scanner.nextLine();
 
             System.out.println("Age: ");
             int age = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.println("Specialization: ");
+            System.out.println("Specalization: ");
             String spec = scanner.nextLine();
 
             System.out.println("Experience: ");
@@ -86,8 +81,9 @@ public class HospitalMenu implements Menu {
 
             Doctor doctor = new Doctor(id, name, age, spec, exp);
             people.add(doctor);
+
             System.out.println("✅ Doctor added!");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e){
             System.out.println("❌ " + e.getMessage());
         }
     }
