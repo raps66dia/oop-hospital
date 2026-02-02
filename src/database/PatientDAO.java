@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 public class PatientDAO {
 
     public void insertPatient(Patient patient) {
-        String sql = "INSERT INTO patients (id, name, age, illness, admitted) VALUES (?, ?, ?, ?, ?)";
+         String sql = "INSERT INTO patients (id, name, age, illness, admitted) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = DatabaseConnection.getConnection();
 
@@ -22,9 +22,9 @@ public class PatientDAO {
             statement.setString(4, patient.getIllness());
             statement.setBoolean(5, patient.isAdmitted());
 
-            int rowInserted = statement.executeUpdate(); // проверяет добавились ли строки, 1 если да и наобоорот
+            int inserted = statement.executeUpdate(); // проверяет добавились ли строки, 1 если да и наобоорот
 
-            if(rowInserted > 0) {
+            if(inserted > 0) {
                 System.out.println("✅ Inserted successfully!");
             }
 
@@ -66,5 +66,74 @@ public class PatientDAO {
         } finally {
             DatabaseConnection.closeConnection(connection);
         }
+    }
+    public boolean updatePatient(Patient patient) {
+        String sql = "UPDATE patients SET name = ?, age = ?, illness = ? WHERE id = ?";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return false;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, patient.getName());
+            statement.setInt(2, patient.getAge());
+            statement.setString(3, patient.getIllness());
+            statement.setInt(4, patient.getId());
+
+            int updated = statement.executeUpdate();
+            if (updated > 0) {
+                System.out.println("✅ Patient updated: " + patient.getName());
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Update failed!");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return false;
+    }
+    public Patient findPatientByID(int patientID) {
+        String sql = "SELECT * FROM patients WHERE id = ?";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return null;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, patientID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                Patient patient = extractPatient(resultSet);
+
+                resultSet.close();
+                statement.close();
+
+                if (patient != null) {
+                    System.out.println("✅Found patient with ID: " + patientID);
+                }
+                return patient;
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return null;
+    }
+    private Patient extractPatient(ResultSet resultSet) throws SQLException {
+
+        int id = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        int age = resultSet.getInt("age");
+        String illness = resultSet.getString("illness");
+
+        Patient patient = null;
+
+        patient = new Patient(id, age, illness, name);
+
+        return patient;
     }
 }

@@ -1,5 +1,6 @@
 package menu;
 
+import database.PatientDAO;
 import model.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -8,10 +9,12 @@ public class HospitalMenu implements Menu {
     private ArrayList<Person> people;
     private Scanner scanner;
     private Appointment appointment;
+    private PatientDAO patientDAO;
 
     public HospitalMenu() {
         this.people = new ArrayList<>();
         this.scanner = new Scanner(System.in);
+        this.patientDAO = new PatientDAO();
 
         people.add(new Doctor(1, "Dr.Arystan", 45, "surgeon", 20));
         people.add(new Patient(1, 18, "cancer", "Nurasyl"));
@@ -124,6 +127,47 @@ public class HospitalMenu implements Menu {
             p.work();
         }
     }
+    private void updatePatient() {
+        System.out.println("Enter patient ID to update: ");
+        int patientID = scanner.nextInt();
+        scanner.nextLine();
 
+        Patient existingPatient = patientDAO.findPatientByID(patientID);
 
+        if (existingPatient == null) {
+            System.out.println("❌ Patient not found with ID: " + patientID);
+            return;
+        }
+
+        System.out.println("Current Info: ");
+        System.out.println(existingPatient.toString());
+
+        System.out.println("Name [" + existingPatient.getName() + "]");
+        System.out.println("Write new name or press (Enter) and stay name");
+        String newName = scanner.nextLine();
+        if (newName.trim().isEmpty()){
+            newName = existingPatient.getName();
+        }
+
+        System.out.println("Illness [" + existingPatient.getIllness() + "]");
+        System.out.println("Write new illness or press (Enter) and stay illness");
+        String newIllness = scanner.nextLine();
+        if (newIllness.trim().isEmpty()) {
+            newIllness = existingPatient.getIllness();
+        }
+
+        System.out.println("Age [" + existingPatient.getAge() + "]");
+        System.out.println("Write new age or press (Enter) and stay age");
+        String Age = scanner.nextLine();
+        int newAge;
+        if(Age.trim().isEmpty()){
+            newAge = existingPatient.getAge();
+        } else {
+            newAge = Integer.parseInt(Age);
+        }
+
+        Patient newPatient = new Patient(patientID, newAge, newIllness, newName);
+        patientDAO.updatePatient(newPatient);
+
+    }
 }
