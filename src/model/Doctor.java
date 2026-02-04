@@ -15,6 +15,12 @@ public class Doctor extends Person {
         super(0, "unknown", 0);
         this.specialization = "Null";
     }
+    public String getName() {
+        return name;
+    }
+    public int getAge() {
+        return age;
+    }
     public void setSpecialization(String specialization){
         if (specialization == null && specialization.trim().isEmpty()) {
             throw new IllegalArgumentException("Warning: write correct!");

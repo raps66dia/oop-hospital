@@ -1,10 +1,14 @@
 package database;
 
+import model.Doctor;
 import model.Patient;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PatientDAO {
 
@@ -34,37 +38,28 @@ public class PatientDAO {
             e.printStackTrace();
         }
     }
-    public void getAllPatients(){
-        String sql = "SELECT * FROM Patients";
+    public void insertDoctor(Doctor doctor) {
+        String sql = "INSERT INTO doctors (id, name, age, specialization, experienceYears) VALUES (?, ?, ?, ?, ?)";
 
         Connection connection = DatabaseConnection.getConnection();
 
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
 
-            System.out.println("------ ALL PATIENTS FROM DATABASE -------");
+            statement.setInt(1, doctor.getId());
+            statement.setString(2, doctor.getName());
+            statement.setInt(3, doctor.getAge());
+            statement.setString(4, doctor.getSpecialization());
+            statement.setInt(5, doctor.getExperienceYears());
 
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                int age = resultSet.getInt("age");
-                String illness = resultSet.getString("illness");
-
-                System.out.println("ID: " + id);
-                System.out.println("Name: " + name);
-                System.out.println("Age: " + age);
-                System.out.println("Illness: " + illness);
-                System.out.println("-----------");
-
+            int testing = statement.executeUpdate();
+            if (testing > 0) {
+                System.out.println("✅ Doctor successfully added!");
             }
-            resultSet.close();
             statement.close();
         } catch (SQLException e) {
-            System.out.println("❌ Select failed!");
+            System.out.println("❌ Insert failed");
             e.printStackTrace();
-        } finally {
-            DatabaseConnection.closeConnection(connection);
         }
     }
     public boolean updatePatient(Patient patient) {
@@ -92,6 +87,89 @@ public class PatientDAO {
             DatabaseConnection.closeConnection(connection);
         }
         return false;
+    }
+    public boolean deletePatient(int patientID) {
+        String sql = "DELETE FROM patients WHERE id = ?";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return false;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            int rowDeleted = statement.executeUpdate();
+            statement.close();
+            if (rowDeleted > 0) {
+                System.out.println("✅ Patient deleted (ID: " + patientID + ")");
+                return true;
+            } else {
+                System.out.println("❌ No patient found with ID: " + patientID);
+            }
+        } catch (SQLException e) {
+            System.out.println("❌ Delete failed!");
+            e.printStackTrace();
+        } finally{
+            DatabaseConnection.closeConnection(connection);
+        }
+        return false;
+    }
+    public List<Patient> getAllPatients(){
+        List<Patient> patientsList = new ArrayList<>();
+        String sql = "SELECT * FROM Patients";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return patientsList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            System.out.println("------ ALL PATIENTS FROM DATABASE -------");
+
+            while (resultSet.next()) {
+                Patient patient = extractPatient(resultSet);
+                if (patient != null) {
+                    patientsList.add(patient);
+                }
+
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("❌ Select failed!");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return patientsList;
+    }
+    public List<Doctor> getAllDoctors(){
+        List<Doctor> doctorsList = new ArrayList<>();
+        String sql = "SELECT * FROM doctors";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return doctorsList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            System.out.println("---------- ALL DOCTORS FROM DATABASE --------");
+            while (resultSet.next()) {
+                Doctor doctor = extractDoctor(resultSet);
+                if (doctor != null) {
+                    doctorsList.add(doctor);
+                }
+            }
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            System.out.println("❌ Select failed");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return doctorsList;
     }
     public Patient findPatientByID(int patientID) {
         String sql = "SELECT * FROM patients WHERE id = ?";
@@ -136,4 +214,169 @@ public class PatientDAO {
 
         return patient;
     }
+    private Doctor extractDoctor(ResultSet resultSet) throws SQLException {
+
+        int id = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        int age = resultSet.getInt("age");
+        String specialization = resultSet.getString("specialization");
+        int exp = resultSet.getInt("experienceyears");
+
+        Doctor doctor = null;
+
+        doctor = new Doctor(id, name, age, specialization, exp);
+
+        return doctor;
+    }
+    public List<Patient> searchByName(String name) {
+        List<Patient> patientsList = new ArrayList<>();
+
+        String sql = "SELECT * FROM patients WHERE name ILIKE ? ORDER BY name";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return patientsList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, "%" + name + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Patient patient = extractPatient(resultSet);
+                if (patient != null) {
+                    patientsList.add(patient);
+                }
+            }
+            resultSet.close();
+            statement.close();
+            System.out.println("✅ Found " + patientsList.size());
+        } catch (SQLException e) {
+            System.out.println("❌ Search failed");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return patientsList;
+    }
+    public List<Doctor> searchDoctorByName(String name) {
+        List<Doctor> doctorList = new ArrayList<>();
+
+        String sql = "SELECT * FROM doctors WHERE name ILIKE ? ORDER BY name";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return doctorList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, "%" + name + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Doctor doctor = extractDoctor(resultSet);
+                if (doctor != null) {
+                    doctorList.add(doctor);
+                }
+            }
+            resultSet.close();
+            statement.close();
+            System.out.println("✅ Found " + doctorList.size());
+        } catch (SQLException e) {
+            System.out.println("❌ Search failed");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return doctorList;
+    }
+    public List<Patient> searchByAgeRange(int minAge, int maxAge) {
+        List<Patient> patientList = new ArrayList<>();
+
+        String sql = "SELECT * FROM patients WHERE age BETWEEN ? AND ? ORDER BY age DESC";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if (connection == null) return patientList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, minAge);
+            statement.setInt(2, maxAge);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Patient patient = extractPatient(resultSet);
+                if (patient != null) {
+                    patientList.add(patient);
+                }
+            }
+            statement.close();
+            resultSet.close();
+
+            System.out.println("✅ Found: " + patientList.size() + "patients");
+        } catch (SQLException e) {
+            System.out.println("❌`Search failed");
+            e.printStackTrace();
+        }  finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return patientList;
+    }
+    public List<Patient> searchByMinAge(int minAge) {
+        List<Patient> patientList = new ArrayList<>();
+
+        String sql = "SELECT * FROM patients WHERE age >= ? ORDER BY age DESC";
+
+        Connection connection = DatabaseConnection.getConnection();
+        if(connection == null) return patientList;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, minAge);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()) {
+                Patient patient = extractPatient(resultSet);
+                if (patient != null) {
+                    patientList.add(patient);
+                }
+            }
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("❌ Search failed");
+            e.printStackTrace();
+        } finally {
+            DatabaseConnection.closeConnection(connection);
+        }
+        return patientList;
+    }
+    public void demoPolymorhp() {
+        List<Patient> patientList = getAllPatients();
+        List<Doctor> doctorList = getAllDoctors();
+
+        System.out.println("\n========================================");
+        System.out.println("  POLYMORPHISM: Patients and Doctors from Database");
+        System.out.println("========================================");
+
+        if (patientList.isEmpty()) {
+            System.out.println("No patients demo");
+        } else {
+            for (Patient p : patientList) {
+                p.work();
+            }
+        }
+        if (doctorList.isEmpty()) {
+            System.out.println("No doctors demo");
+        } else {
+            for (Doctor d : doctorList) {
+                d.work();
+            }
+        }
+        System.out.println("========================================\n");
+    }
+
 }
